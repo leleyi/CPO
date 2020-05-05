@@ -13,7 +13,13 @@ class HashTable(object):
     _empty = object()
     _deleted = object()
 
+    #
+    # def __setattr__(self, key, value):
+    #     raise AttributeError('不可变类')
+
     def __init__(self, size=11):
+        # super().__setattr__()
+        # self.capacity = 0;
         self.size = size
         self._len = 0
         self._keys = [self._empty] * size  # keys
@@ -29,16 +35,17 @@ class HashTable(object):
                 self._values[hash_] = value
                 self._len += 1
                 return
-            elif self._keys[hash_] == key:
                 # key already exists here, assign over
+            elif self._keys[hash_] == key:
                 self._keys[hash_] = key
                 self._values[hash_] = value
                 return
 
+            # the collision get a new hash_value
             hash_ = self._rehash(hash_)
 
+            # if there is no place to put eg initial_hash == hash_
             if initial_hash == hash_:
-                # table is full
                 raise ValueError("Table is full")
 
     def get(self, key):
@@ -73,14 +80,16 @@ class HashTable(object):
             if initial_hash == hash_:
                 # table is full and wrapped around
                 return None
-
+    """
+        get the hash value
+    """
     def hash(self, key):
         return key % self.size
 
+    """
+        open address  (linear probing)
+    """
     def _rehash(self, old_hash):
-        """
-        linear probing
-        """
         return (old_hash + 1) % self.size
 
     def __getitem__(self, key):
