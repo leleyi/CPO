@@ -44,6 +44,8 @@ since map can get(key) in $ O(1) $ so So he must meet random storage. So we use 
 ```
 * work demonstration (how to use developed software, how to test it), should be repeatable by an instructor by given command-line
 examples;
+
+
 #### conclusion
 * Mutable objects are nice because you can make changes in-place, without allocating a new object. 
 But be careful—whenever you make an in-place change to an object, all references to that object will now reflect the change.    
@@ -51,6 +53,7 @@ But be careful—whenever you make an in-place change to an object, all referenc
 * Imutable objects are more easy to implement the thread safety. because it will not be change.but  However, whenever you do need a modified object of that new type you must suffer the overhead of a new object creation, as well as potentially causing more frequent garbage collections. 
 
 * in our implementation:
+
     1.there are something to improve, the map is fix size, we can make the capcity more large when the capcity is not enough. 
     ``` 
     def __init__(self):
@@ -72,4 +75,20 @@ But be careful—whenever you make an in-place change to an object, all referenc
     ```
     but we don't have enough time to test this.
     2.the linear probing so make the data is unevenly distributed in the list, we can use We can use square probing or other methods to try to avoid this problem
-    
+    3.the immutable and the mutable compare
+    ```
+    #mutable
+     def test_put(self):
+        table = HashTableMutable()
+        temp = table.put(1, 3)
+        print(table) ### output {1:3} 
+        print(temp) ### output None  we can see that , the modify is on the original map
+        self.assertEqual(table.get(1), 3)
+    #immutable 
+    def test_put(self):
+        table = HashTableImmutable()
+        temp = table.put(5, 111)
+        print(table) ###  output: {}
+        print(temp) ### output:{5,111}  we can see that it is not change the original map return a new one
+        self.assertEqual(temp.get(5), 111)
+    ``` 

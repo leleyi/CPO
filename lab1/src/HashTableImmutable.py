@@ -33,10 +33,9 @@ class HashTableImmutable(HashMap):
 
     def del_(self, key):
         table = HashMap()
-        for key in self._keyset:
-            table.put(key, self.get(key))
+        for k in self._keyset:
+            table.put(k, self.get(k))
         table.del_(key)
-
         return HashTableImmutable(table)
 
     def mconcat(self, other):

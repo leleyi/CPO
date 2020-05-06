@@ -6,6 +6,8 @@ class MyTestCase(unittest.TestCase):
     def test_put(self):
         table = HashTableImmutable()
         temp = table.put(5, 111)
+        print(table)
+        print(temp)
         self.assertEqual(temp.get(5), 111)
 
     def test_get(self):
