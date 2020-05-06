@@ -154,7 +154,7 @@ class HashMap(object):
         else:
             self.index += 1
             val = self.get(self._keyset[self.index - 1])
-            return key, var
+            return key, val
 
     def __getitem__(self, key):
         return self.get(key)
