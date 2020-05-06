@@ -17,13 +17,16 @@ class HashTable(object):
     # def __setattr__(self, key, value):
     #     raise AttributeError('不可变类')
 
-    def __init__(self, size=11):
+    def __init__(self, size=11, **kwds):
         # super().__setattr__()
         # self.capacity = 0;
         self.size = size
         self._len = 0
         self._keys = [self._empty] * size  # keys
         self._values = [self._empty] * size  # values
+        """init_by_dict"""
+        if kwds.__len__() != 0:
+            self.put_dic(**kwds)
 
     def put(self, key, value):
         initial_hash = hash_ = self.hash(key)
@@ -80,17 +83,51 @@ class HashTable(object):
             if initial_hash == hash_:
                 # table is full and wrapped around
                 return None
+
+    def to_list(self):
+        kvlist = [self._empty] * size
+        if self._empty:
+            return kvlist
+        else:
+            for i, key in self._keys:
+                value = self.get(key)
+                kvlist[i] = Node(key, value)
+        return kvlist
+
     """
         get the hash value
     """
+
     def hash(self, key):
         return key % self.size
 
     """
         open address  (linear probing)
     """
+
     def _rehash(self, old_hash):
         return (old_hash + 1) % self.size
+
+    """put value dict"""
+
+    def put_dic(self, **kwargs):
+        for k, v in kwargs.items():
+            self.put(int(k), v)
+
+    def size(self):
+        return self.size
+
+    def map(self):
+        return None
+
+    def reduce(self):
+        return None
+
+    def __iter__(self):
+        return None
+
+    def __next__(self):
+        return None
 
     def __getitem__(self, key):
         return self.get(key)
@@ -103,6 +140,15 @@ class HashTable(object):
 
     def __len__(self):
         return self._len
+
+
+class Node:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+
+    def __repr__(self):
+        return str(self.key + " : " + self.value)
 
 
 class ResizableHashTable(HashTable):

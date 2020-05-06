@@ -23,10 +23,10 @@ class MyTestCase(unittest.TestCase):
         # self.assertEqual();
 
     def test_something(self):
-        table = HashTable()
-        table.put(1, 2)
-        table[1] = 3
-        print(table[1])
+        dic = {'3': 123, '2': 333}
+        table = HashTable(**dic)
+        #table.put_dic(**dic)
+        print(table[3])
 
 if __name__ == '__main__':
     unittest.main()
