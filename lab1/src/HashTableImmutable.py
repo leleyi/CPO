@@ -7,49 +7,53 @@ class HashTableImmutable(HashMap):
         self._len = 0
         self.kvEntry = [self._empty] * size
         self.index = 0
+        self._keyset = [] * size
         if kwds.__len__() != 0:
             hashmap = HashMap(**kwds)
         if hashmap is not None:
-            for entry in hashmap.kvEntry:
-                if entry is hashmap._empty or entry is hashmap._deleted:
-                    continue
-                else:
-                    print("do this?")
-                    super(HashTableImmutable, self).put(entry.key, entry.value)
+            for key in hashmap._keyset:
+                super(HashTableImmutable, self).put(key, hashmap.get(key))
 
     def put(self, key, value):
-        print("It's a immutable version put.It will return a new HashTableImmutable.")
 
         table = HashMap()
+        for key in self._keyset:
+            table.put(key, self.get(key))
         table.put(key, value)
-        for entry in self.kvEntry:
-            if entry is self._empty or entry is self._deleted:
-                continue
-            else:
-                table.put(entry.key, entry.value)
 
         return HashTableImmutable(table)
 
     def put_dic(self, **kwargs):
-        print("It's a immutable version put_dic.It will return a new HashTableImmutable.")
         table = HashMap()
-        for entry in self.kvEntry:
-            if entry is self._empty or entry is self._deleted:
-                continue
-            else:
-                table.put(entry.key, entry.value)
+        for key in self._keyset:
+            table.put(key, self.get(key))
         table.put_dic(**kwargs)
 
         return HashTableImmutable(table)
 
     def del_(self, key):
-        print("It's a immutable version.It will return a new HashTableImmutable.")
         table = HashMap()
-        for entry in self.kvEntry:
-            if entry is self._empty or entry is self._deleted:
-                continue
-            else:
-                table.put(entry.key, entry.value)
+        for key in self._keyset:
+            table.put(key, self.get(key))
         table.del_(key)
 
         return HashTableImmutable(table)
+
+    def mconcat(self, other):
+        table = HashMap()
+        for key in self._keyset:
+            table.put(key, self.get(key))
+
+        for key in other._keyset:
+            table.put(key, other.get(key))
+
+        return HashTableImmutable(table)
+
+    def map(self, f):
+        table = HashMap()
+        for key in self._keyset:
+            value = self.get(key)
+            value = f(value)
+            table.put(key, value)
+        return table
+
