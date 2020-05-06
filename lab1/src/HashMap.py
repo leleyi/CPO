@@ -4,7 +4,7 @@ class Node:
         self.value = value
 
     def __repr__(self):
-        return str("{" + str(self.key) + ":" + str(self.value) + "}")
+        return str("{" + str(self.key) + ": " + str(self.value) + "}")
 
 
 class HashMap(object):
@@ -84,8 +84,8 @@ class HashMap(object):
                 # table is full and wrapped around
                 return None
 
-    def to_list(self):
-        kvlist = []
+    def to_dict(self):
+        kvlist = {}
         if self.size == 0:
             return kvlist
         else:
@@ -93,7 +93,7 @@ class HashMap(object):
                 if entry is self._empty or entry is self._deleted:
                     continue
                 else:
-                    kvlist.append(entry)
+                    kvlist[str(entry.key)] = entry.value
         return kvlist
     """
         get the hash value
@@ -126,9 +126,6 @@ class HashMap(object):
                 continue
             else:
                 self.put(entry.key, entry.value)
-
-    def size(self):
-        return self.size
 
     def map(self, f):
         for entry in self.kvEntry:
@@ -170,7 +167,15 @@ class HashMap(object):
     def __len__(self):
         return self._len
 
-
+# {'1': 2, '2': 3, '3': 4}
+    def __repr__(self):
+        res = ""
+        for entry in self.kvEntry:
+            if entry is self._empty or entry is self._deleted:
+               continue
+            else:
+                res = res + str(entry.key)+":"+str(entry.value) + ","
+        return "{" + res[0:-1] + "}"
 
 
 
