@@ -16,13 +16,14 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(table.get(1), 3)
 
     def test_size(self):
+        table = HashTableMutable()
         self.assertEqual(table.__len__(), 0)
         table.put(1, 2)
         self.assertEqual(table.__len__(), 1)
         table.put(2, 3)
         self.assertEqual(table.__len__(), 2)
 
-    def test_todict(self):
+    def test_to_dict(self):
         table = HashMap()
         table.put(4, 5)
         test_data = {'1': 2, '2': 3, '3': 4}
@@ -35,7 +36,7 @@ class MyTestCase(unittest.TestCase):
     def test_from_dict(self):
         test_data = {'1': 2, '2': 3, '3': 4}
         table = HashMap(**test_data)
-        self.assertEqual(table.to_dict(),test_data)
+        self.assertEqual(table.to_dict(), test_data)
 
 
     def test_mconcat(self):

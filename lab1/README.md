@@ -8,7 +8,12 @@
 
 #### contribution
 * contribution summary for each group member (should be checkable by git log and git blame);
+    - Liu Jun Complete the writing and testing of Muatable Code 
+    - Wang Xin Yue Complete the writing and testing of Immutable Code
+    - Together to  Complete readme.md
 #### explanation 
+hash map(open address)
+we use the list to storage 
 * explanation of taken design decisions and analysis;
 #### work demonstration 
 * work demonstration (how to use developed software, how to test it), should be repeatable by an instructor by given command-line
