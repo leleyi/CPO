@@ -43,7 +43,11 @@ since map can get(key) in $ O(1) $ so So he must meet random storage. So we use 
         self.index = 0
 ```
 * work demonstration (how to use developed software, how to test it), should be repeatable by an instructor by given command-line
-examples;
+  examples;
+
+  ![Mutable](https://github.com/leleyi/CPO/blob/master/lab1/fig/1.png)
+
+  ![Imutable](https://github.com/leleyi/CPO/blob/master/lab1/fig/2.png)
 
 
 #### conclusion
@@ -91,4 +95,4 @@ But be careful—whenever you make an in-place change to an object, all referenc
         print(table) ###  output: {}
         print(temp) ### output:{5,111}  we can see that it is not change the original map return a new one
         self.assertEqual(temp.get(5), 111)
-    ``` 
+    ```
