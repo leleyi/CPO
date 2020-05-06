@@ -26,12 +26,11 @@ class HashMap(object):
         self.size = size
         self._len = 0
         self.kvEntry = [self._empty] * size
+        self._keyset = [] * size
         self.index = 0
 
-        print(kwds)
         """init_by_dict"""
         if kwds.__len__() != 0:
-            print("feiji")
             self.put_dic(**kwds)
 
     def put(self, key, value):
@@ -41,6 +40,7 @@ class HashMap(object):
             if self.kvEntry[hash_] is self._empty or self.kvEntry[hash_] is self._deleted:
                 # can assign to hash_ index
                 self.kvEntry[hash_] = Node(key, value)
+                self._keyset.append(key);
                 self._len += 1
                 return
                 # key already exists here, assign over
@@ -78,6 +78,7 @@ class HashMap(object):
             elif self.kvEntry[hash_].key == key:
                 # key found, assign with deleted sentinel
                 self.kvEntry[hash_] = self._deleted
+                self._keyset.remove(key)
                 self._len -= 1
                 return
 
@@ -97,9 +98,13 @@ class HashMap(object):
                 else:
                     kvlist[str(entry.key)] = entry.value
         return kvlist
+
     """
         get the hash value
     """
+
+    def items(self):
+        return self.kvEntry
 
     def hash(self, key):
         return key % self.size
@@ -118,44 +123,37 @@ class HashMap(object):
             self.put(int(k), v)
 
     def mempty(self):
-        self.kvEntry = [self._empty] * self.size()
+        self.kvEntry = [self._empty] * self.size
 
     def mconcat(self, other):
-        if self.size == 0:
-            return other
-        for entry in other.kvEntry:
-            if entry is self._empty or entry is self._deleted:
-                continue
-            else:
-                self.put(entry.key, entry.value)
+        for key in other._keyset:
+            value = other.get(key)
+            self.put(key, value)
 
     def map(self, f):
-        for entry in self.kvEntry:
-            if entry is self._empty:
-                continue
-            else:
-                value = f(entry.value)
-                self.put(entry.key, value)
+        for key in self._keyset:
+            value = self.get(key)
+            value = f(value)
+            self.put(key, value)
 
     def reduce(self, f, initial_state):
         state = initial_state
-        for entry in self.kvEntry:
-            if entry is self._empty or entry is self._deleted:
-                continue
-            else:
-                value = entry.value
-                state = f(state, value)
+        for key in self._keyset:
+            value = self.get(key)
+            state = f(state, value)
         return state
 
     def __iter__(self):
-        return self.kvEntry
+        return iter(self.kvEntry)
 
     def __next__(self):
-        if self.index >= self.size:
+        print("i")
+        if self.index >= self._len:
             raise StopIteration("end")
         else:
             self.index += 1
-            return self.kvEntry[self.index - 1]
+            val = self.get(self._keyset[self.index - 1])
+            return key, var
 
     def __getitem__(self, key):
         return self.get(key)
@@ -169,35 +167,12 @@ class HashMap(object):
     def __len__(self):
         return self._len
 
-# {'1': 2, '2': 3, '3': 4}
+    # {'1': 2, '2': 3, '3': 4}
     def __repr__(self):
         res = ""
         for entry in self.kvEntry:
             if entry is self._empty or entry is self._deleted:
-               continue
+                continue
             else:
-                res = res + str(entry.key)+":"+str(entry.value) + ","
+                res = res + str(entry.key) + ":" + str(entry.value) + ","
         return "{" + res[0:-1] + "}"
-
-
-
-# class ResizableHashTable(HashMap):
-#     MIN_SIZE = 8
-#
-#     def __init__(self):
-#         super().__init__(self.MIN_SIZE)
-#
-#     def put(self, key, value):
-#         rv = super().put(key, value)
-#         # increase size of dict * 2 if filled >= 2/3 size (like python dict)
-#         if len(self) >= (self.size * 2) / 3:
-#             self.__resize()
-#
-#     def __resize(self):
-#         keys, values = self._keys, self._values
-#         self.size *= 2  # this will be the new size
-#         self._len = 0
-#         self.kvEntry = [self._empty] * self.size
-#         for key, value in zip(keys, values):
-#             if key is not self._empty and key is not self._deleted:
-#                 self.put(key, value)
