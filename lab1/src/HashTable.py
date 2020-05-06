@@ -85,7 +85,7 @@ class HashTable(object):
                 return None
 
     def to_list(self):
-        kvlist = [self._empty] * size
+        kvlist = [self._empty] * self.size
         if self._empty:
             return kvlist
         else:

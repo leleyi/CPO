@@ -28,8 +28,10 @@ class HashMap(object):
         self.kvEntry = [self._empty] * size
         self.index = 0
 
+        print(kwds)
         """init_by_dict"""
         if kwds.__len__() != 0:
+            print("feiji")
             self.put_dic(**kwds)
 
     def put(self, key, value):
