@@ -87,6 +87,7 @@ class HashMap(object):
                 # table is full and wrapped around
                 return None
 
+    """the order is not change"""
     def to_dict(self):
         kvlist = {}
         if self.size == 0:
