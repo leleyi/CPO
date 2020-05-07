@@ -47,7 +47,7 @@ since map can get(key) in $ O(1) $ so So he must meet random storage. So we use 
 
   ![Mutable](https://github.com/leleyi/CPO/blob/master/lab1/fig/1.png)
 
-  ![Imutable](https://github.com/leleyi/CPO/blob/master/lab1/fig/2.png)
+  ![Immutable](https://github.com/leleyi/CPO/blob/master/lab1/fig/2.jpg)
 
 
 #### conclusion

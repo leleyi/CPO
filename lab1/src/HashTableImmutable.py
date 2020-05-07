@@ -17,8 +17,8 @@ class HashTableImmutable(HashMap):
     def put(self, key, value):
 
         table = HashMap()
-        for key in self._keyset:
-            table.put(key, self.get(key))
+        for k in self._keyset:
+            table.put(k, self.get(k))
         table.put(key, value)
 
         return HashTableImmutable(table)
