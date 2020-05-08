@@ -77,19 +77,16 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(table1.reduce(lambda st, e: st + e, 0), 346)
 
     def test_iter(self):
-        pass
 
-        # dic3 = {'1': 123, '2': 333, '3': 23, '4': 323}
-        # table = HashMap()
-        # table.put_dic(**dic3)
-        # tmp = {}
-        # # for e in table:
-        # #     if isinstance(e, dict):
-        # #         tmp[e.key] = e.value
-        # # self.assertEqual(table.to_dict(), tmp)
-        # # self.assertEqual(lst.to_list(), tmp)
-        # i = iter(table())
-        # self.assertRaises(StopIteration, lambda: next(i))
+        dic3 = {'1': 123, '2': 333, '3': 23, '4': 323}
+        table = HashMap()
+        table.put_dic(**dic3)
+        tmp = {}
+        for e in table:
+            tmp[str(e)] = table.get(e)
+        self.assertEqual(table.to_dict(), tmp)
+        i = iter(HashMap())
+        self.assertRaises(StopIteration, lambda: next(i))
 
 if __name__ == '__main__':
     unittest.main()

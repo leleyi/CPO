@@ -145,10 +145,9 @@ class HashMap(object):
         return state
 
     def __iter__(self):
-        return iter(self.kvEntry)
+        return iter(self._keyset)
 
     def __next__(self):
-        print("i")
         if self.index >= self._len:
             raise StopIteration("end")
         else:
