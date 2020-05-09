@@ -30,6 +30,15 @@ def to_dict(map):
     return kvlist
 
 
+def to_list(map):
+    res = []
+    if map is None:
+        return res
+    for key in map._keyset:
+        res.append(map.get(key))
+    return res
+
+
 def put(map, key, value):
     table = cons(map)
     table.put(key, value)
@@ -38,7 +47,6 @@ def put(map, key, value):
 
 def get(map, key):
     return map.get(key)
-
 
 
 def put_dic(map, **kwargs):
