@@ -1,6 +1,6 @@
 import unittest
 
-from lab1.src.mutable import *
+from mutable import *
 
 
 class MyTestCase(unittest.TestCase):

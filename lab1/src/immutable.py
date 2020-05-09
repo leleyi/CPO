@@ -1,4 +1,4 @@
-from lab1.src.mutable import *
+from mutable import *
 
 
 def cons(map):
