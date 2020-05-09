@@ -56,13 +56,15 @@ def del_(map, key):
 def mconcat(map1, map2):
     if map1 is None:
         return map2
+    if map2 is None:
+        return map1
     tabel = cons(map1)
     tabel.mconcat(map2)
     return tabel
 
 
 def map(map, f):
-    table = mconcat(map)
+    table = cons(map)
     for key in map._keyset:
         value = map.get(key)
         value = f(value)
