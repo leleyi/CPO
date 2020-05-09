@@ -1,4 +1,4 @@
-from lab1.src.HashMap import *
+from lab1.src.mutable import *
 
 
 def cons(map):
