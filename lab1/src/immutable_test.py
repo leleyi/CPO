@@ -1,5 +1,5 @@
 import unittest
-from lab1.src.immutable import *
+from immutable import *
 
 
 class MyTestCase(unittest.TestCase):

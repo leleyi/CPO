@@ -1,6 +1,6 @@
 import unittest
 
-from lab1.src.mutable import *
+from mutable import *
 
 
 class MyTestCase(unittest.TestCase):
@@ -67,7 +67,7 @@ class MyTestCase(unittest.TestCase):
     def test_map(self):
         dict1 = {3: 23, 4: 323}
         dict2 = {3: '23', 4: '323'}
-        table1 = HashMap(dict2)
+        table1 = HashMap(dict1)
         table1.map(str)
         self.assertEqual(table1.to_dict(), dict2)
 
