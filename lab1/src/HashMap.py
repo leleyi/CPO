@@ -25,11 +25,11 @@ class HashMap(object):
     _empty = object()
     _deleted = object()
 
-    def __init__(self, size=11, dict=None):
-        self.size = size
+    def __init__(self, dict=None):
+        self.size = 11
         self._len = 0
-        self.kvEntry = [self._empty] * size
-        self._keyset = [] * size
+        self.kvEntry = [self._empty] * self.size
+        self._keyset = [] * self.size
         self.index = 0
 
         """init_by_dict"""
