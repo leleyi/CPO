@@ -31,7 +31,6 @@ class HashMap(object):
         self.kvEntry = [self._empty] * self.size
         self._keyset = [] * self.size
         self.index = 0
-
         """init_by_dict"""
         if dict is not None:
             self.put_dic(dict)

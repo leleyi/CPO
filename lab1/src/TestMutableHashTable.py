@@ -10,8 +10,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_put(self):
         table = HashMap()
-        temp = table.put(1, 3)
-        self.assertEqual(table.get(1), 3)
+        table.put(2, 3)
+        self.assertEqual(table.get(2), 3)
 
     def test_del(self):
         table = HashMap()
