@@ -20,15 +20,23 @@ def size(map):
 
 def to_dict(map):
     kvlist = {}
-    if map.size == 0:
-        return map
-    else:
-        for entry in map.kvEntry:
-            if entry is map._empty or entry is map._deleted:
-                continue
-            else:
-                kvlist[entry.key] = entry.value
+    if map is None:
+        return kvlist
+    for entry in map.kvEntry:
+        if entry is map._empty or entry is map._deleted:
+            continue
+        else:
+            kvlist[entry.key] = entry.value
     return kvlist
+
+
+def to_list(map):
+    res = []
+    if map is None:
+        return res
+    for key in map._keyset:
+        res.append(map.get(key))
+    return res
 
 
 def put(map, key, value):
@@ -39,7 +47,6 @@ def put(map, key, value):
 
 def get(map, key):
     return map.get(key)
-
 
 
 def put_dic(map, **kwargs):
@@ -55,13 +62,17 @@ def del_(map, key):
 
 
 def mconcat(map1, map2):
+    if map1 is None:
+        return map2
+    if map2 is None:
+        return map1
     tabel = cons(map1)
     tabel.mconcat(map2)
     return tabel
 
 
 def map(map, f):
-    table = mconcat(map)
+    table = cons(map)
     for key in map._keyset:
         value = map.get(key)
         value = f(value)
