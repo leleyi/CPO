@@ -1,5 +1,5 @@
 import unittest
-from lab1.src.HashTableImmutable import *
+from lab1.src.immutable import *
 
 
 class MyTestCase(unittest.TestCase):
