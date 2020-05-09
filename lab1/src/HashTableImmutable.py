@@ -20,14 +20,13 @@ def size(map):
 
 def to_dict(map):
     kvlist = {}
-    if map.size == 0:
-        return map
-    else:
-        for entry in map.kvEntry:
-            if entry is map._empty or entry is map._deleted:
-                continue
-            else:
-                kvlist[entry.key] = entry.value
+    if map is None:
+        return kvlist
+    for entry in map.kvEntry:
+        if entry is map._empty or entry is map._deleted:
+            continue
+        else:
+            kvlist[entry.key] = entry.value
     return kvlist
 
 
@@ -55,6 +54,8 @@ def del_(map, key):
 
 
 def mconcat(map1, map2):
+    if map1 is None:
+        return map2
     tabel = cons(map1)
     tabel.mconcat(map2)
     return tabel
