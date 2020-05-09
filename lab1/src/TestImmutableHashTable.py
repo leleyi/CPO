@@ -19,26 +19,16 @@ class MyTestCase(unittest.TestCase):
 
     def test_del_(self):
         self.assertEqual(to_dict(put(HashMap(), 1, 2)), {1: 2})
-
-        self.assertEqual(table.get(3), 23)
-        self.assertEqual(temp.get(3), None)
+        self.assertEqual(to_dict(del_(put(HashMap(), 1, 2), 1)), {})
 
     def test_to_dict(self):
-        dic = {'3': 23, '4': 323}
-        table = HashTableImmutable(**dic)
-        temp = table.to_dict()
-        self.assertEqual(temp, dic)
+        self.assertEqual(to_dict(None), {})
+        self.assertEqual(to_dict(put(HashMap(), 1, 2)), {1: 2})
+        self.assertEqual(to_dict(put(put(HashMap(), 1, 2), 2, 3)), {1: 2, 2: 3})
 
     def test_mconcat(self):
-        dic = {'1': 123, '2': 333}
-        dic2 = {'3': 23, '4': 323}
-        dic3 = {'1': 123, '2': 333, '3': 23, '4': 323}
-        table1 = HashTableImmutable(**dic)
-        table2 = HashTableImmutable(**dic2)
-        temp = table1.mconcat(table2)
-        self.assertEqual(temp.to_dict(), dic3)
-        self.assertEqual(table1.to_dict(), dic)
-        self.assertEqual(table2.to_dict(), dic2)
+        self.assertEqual(mconcat(None, None), None)
+        self.assertEqual(to_dict(mconcat(put(HashMap(), 1, 2), None)), to_dict(put(HashMap(), 1, 2)))
 
     def test_map(self):
         dic2 = {'3': 23, '4': 323}
