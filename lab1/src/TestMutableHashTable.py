@@ -1,6 +1,6 @@
 import unittest
 
-from lab1.src.HashTableMutable import *
+from lab1.src.HashMap import *
 
 class MyTestCase(unittest.TestCase):
 
@@ -63,27 +63,26 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(table1.to_dict(), dic3)
 
     def test_map(self):
-        dic2 = {'3': 23, '4': 323}
-        dic3 = {'3': '23', '4': '323'}
-        table1 = HashMap(**dic2)
+        dic2 = {3: 23, 4: 323}
+        dic3 = {3: 231, 4: 323}
+        table1 = HashMap(dic2)
         table1.map(str)
         self.assertEqual(table1.to_dict(), dic3)
 
     def test_reduce(self):
         map = HashMap()
         self.assertEqual(map.reduce(lambda st, e: st + e, 0), 0)
-        dic2 = {'3': 23, '4': 323}
-        table1 = HashMap(**dic2)
+        dic2 = {3: 23, 4: 323}
+        table1 = HashMap(dic2)
         self.assertEqual(table1.reduce(lambda st, e: st + e, 0), 346)
 
     def test_iter(self):
-
-        dic3 = {'1': 123, '2': 333, '3': 23, '4': 323}
+        dic3 = {1: 123, 2: 333, 3: 23, 4: 323}
         table = HashMap()
-        table.put_dic(**dic3)
+        table.put_dic(dic3)
         tmp = {}
         for e in table:
-            tmp[str(e)] = table.get(e)
+            tmp[e.key] = e.value
         self.assertEqual(table.to_dict(), tmp)
         i = iter(HashMap())
         self.assertRaises(StopIteration, lambda: next(i))

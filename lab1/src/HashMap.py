@@ -4,7 +4,10 @@ class Node:
         self.value = value
 
     def __repr__(self):
-        return str("{" + str(self.key) + ": " + str(self.value) + "}")
+        return str("{" + str(self.key) + ":" + str(self.value) + "}")
+
+    def __eq__(self, other):
+        return self.key == other.key and self.value == other.value
 
 
 class HashMap(object):
@@ -22,7 +25,7 @@ class HashMap(object):
     _empty = object()
     _deleted = object()
 
-    def __init__(self, size=11, **kwds):
+    def __init__(self, size=11, dict=None):
         self.size = size
         self._len = 0
         self.kvEntry = [self._empty] * size
@@ -30,8 +33,8 @@ class HashMap(object):
         self.index = 0
 
         """init_by_dict"""
-        if kwds.__len__() != 0:
-            self.put_dic(**kwds)
+        if dict is not None:
+            self.put_dic(dict)
 
     def put(self, key, value):
         initial_hash = hash_ = self.hash(key)
@@ -40,7 +43,7 @@ class HashMap(object):
             if self.kvEntry[hash_] is self._empty or self.kvEntry[hash_] is self._deleted:
                 # can assign to hash_ index
                 self.kvEntry[hash_] = Node(key, value)
-                self._keyset.append(key);
+                self._keyset.append(key)
                 self._len += 1
                 return
                 # key already exists here, assign over
@@ -53,6 +56,10 @@ class HashMap(object):
             # if there is no place to put eg initial_hash == hash_
             if initial_hash == hash_:
                 raise ValueError("Table is full")
+
+    def put_entry(self, entry):
+        key = entry.key, value = entry.value
+        self.put(key, value)
 
     def get(self, key):
         initial_hash = hash_ = self.hash(key)
@@ -88,24 +95,31 @@ class HashMap(object):
                 return None
 
     """the order is not change"""
+
     def to_dict(self):
         kvlist = {}
-        if self.size == 0:
-            return kvlist
-        else:
-            for entry in self.kvEntry:
-                if entry is self._empty or entry is self._deleted:
-                    continue
-                else:
-                    kvlist[str(entry.key)] = entry.value
+        for item in self.items():
+            kvlist[item.key] = item.value
         return kvlist
+
+    def to_list(self):
+        res = []
+        for key in self._keyset:
+            res.append(self.get(key))
+        return res
 
     """
         get the hash value
     """
 
     def items(self):
-        return self.kvEntry
+        items = []
+        for entry in self.kvEntry:
+            if entry is self._empty or entry is self._deleted:
+                continue
+            else:
+                items.append(entry)
+        return items
 
     def hash(self, key):
         return key % self.size
@@ -119,8 +133,8 @@ class HashMap(object):
 
     """put value dict"""
 
-    def put_dic(self, **kwargs):
-        for k, v in kwargs.items():
+    def put_dic(self, dict):
+        for k, v in dict.items():
             self.put(int(k), v)
 
     def mempty(self):
@@ -145,7 +159,7 @@ class HashMap(object):
         return state
 
     def __iter__(self):
-        return iter(self._keyset)
+        return iter(self.items())
 
     def __next__(self):
         if self.index >= self._len:
