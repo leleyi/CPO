@@ -33,7 +33,7 @@ class HashMap(object):
         self.index = 0
         """init_by_dict"""
         if dict is not None:
-            self.put_dic(dict)
+            self.from_dict(dict)
 
     def put(self, key, value):
         initial_hash = hash_ = self.hash(key)
@@ -95,7 +95,7 @@ class HashMap(object):
 
     """the order is not change"""
     """from dict"""
-    def from_dic(self, dict):
+    def from_dict(self, dict):
         for k, v in dict.items():
             self.put(int(k), v)
 

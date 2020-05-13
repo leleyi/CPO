@@ -3,8 +3,7 @@ import unittest
 from mutable import *
 from hypothesis import given
 import hypothesis.strategies as st
-from hypothesis import given
-import hypothesis.strategies as st
+
 
 class MyTestCase(unittest.TestCase):
 
@@ -20,7 +19,7 @@ class MyTestCase(unittest.TestCase):
     def test_del(self):
         table = HashMap()
         dict = {1: 2, 2: 3, 3: 4}
-        table.put_dic(dict)
+        table.from_dict(dict)
         del table[1]
         dict2 = {2: 3, 3: 4}
         self.assertEqual(table.to_dict(), dict2)
@@ -28,7 +27,7 @@ class MyTestCase(unittest.TestCase):
     def test_mempty(self):
         table = HashMap()
         dict = {1: 2, 2: 3, 3: 4}
-        table.put_dic(dict)
+        table.from_dict(dict)
         table.mempty()
         self.assertEqual(table.to_dict(), {})
 
@@ -44,7 +43,7 @@ class MyTestCase(unittest.TestCase):
         table = HashMap()
         table.put(4, 5)
         dict1 = {1: 2, 2: 3, 3: 4}
-        table.put_dic(dict1)
+        table.from_dict(dict1)
         dict2 = {1: 2, 2: 3, 3: 4, 4: 5}
         self.assertEqual(table.to_dict(), dict2)
 
@@ -95,7 +94,7 @@ class MyTestCase(unittest.TestCase):
     def test_iter(self):
         dict1 = {1: 123, 2: 333, 3: 23, 4: 323}
         table = HashMap()
-        table.put_dic(dict1)
+        table.from_dict(dict1)
         tmp = {}
         for e in table:
             tmp[e.key] = e.value
@@ -116,18 +115,18 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(table.get_hash(12), 2)
 
 
-    @given(st.lists(st.integers()))
-    def test_from_list_to_list_equality(self, a):
-        dict = HashMap()
-        dict.from_list(a)
-        b = dict.to_list
-        self.assertEqual(a, b)
-
-    @given(st.lists(st.integers()))
-    def test_python_len_and_list_size_equality(self, a):
-        dict = HashMap()
-        dict.from_list(a)
-        self.assertEqual(len(dict), len(a))
+    # @given(st.lists(st.integers())) # the map
+    # def test_from_list_to_list_equality(self, a):
+    #     dict = HashMap()
+    #     dict.from_list(a)
+    #     b = dict.to_list
+    #     self.assertEqual(a, b)
+    #
+    # @given(st.lists(st.integers()))
+    # def test_python_len_and_list_size_equality(self, a):
+    #     dict = HashMap()
+    #     dict.from_list(a)
+    #     self.assertEqual(len(dict), len(a))
 
 
 if __name__ == '__main__':

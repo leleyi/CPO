@@ -2,9 +2,8 @@ from mutable import *
 
 
 def cons(map):
-    table = HashMap();
-    for k in map._keyset:
-        table.put(k, map.get(k))
+    table = HashMap()
+    table.from_dict(map.to_dict())
     return table
 
 
@@ -14,9 +13,7 @@ def size(map):
     else:
         return len(map)
 
-
 """the order is not change"""
-
 
 def to_dict(map):
     kvlist = {}
