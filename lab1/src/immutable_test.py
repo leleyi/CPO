@@ -1,5 +1,7 @@
 import unittest
 from immutable import *
+from hypothesis import given
+import hypothesis.strategies as st
 
 
 class MyTestCase(unittest.TestCase):
@@ -73,6 +75,32 @@ class MyTestCase(unittest.TestCase):
         self.assertNotEqual(id(table4), id(table3))
         table5 = map(table4, str)
         self.assertNotEqual(id(table4), id(table5))
+
+    def test_hash_collision(self):
+        table1 = HashMap()
+        table2 = HashMap()
+        table1 = put(table1, 1, 3)
+        table2 = put(table2, 12, 3)
+        self.assertEqual(get_hash(table1, 1), get_hash(table2, 12))
+        # means the key of 1 and 12 have the same hash_value;
+        # put the the key that have same init_hash_value
+        table1 = put(table1, 12, 4)
+
+        # now they have different hash_value, beacase the collision happen, to deal the collision the key rehash unit have not coollision
+        self.assertNotEqual(get_hash(table1, 12), get_hash(table2, 12))
+
+    @given(st.lists(st.integers(), max_size=10))  # the map
+    def test_from_list_to_list_equality(self, a):
+        dict = HashMap()
+        dict = from_list(dict, a)
+        b = to_list(dict)
+        self.assertEqual(a, b)
+
+    @given(st.lists(st.integers(), max_size=10))
+    def test_python_len_and_list_size_equality(self, a):
+        dict = HashMap()
+        dict  = from_list(dict, a)
+        self.assertEqual(len(dict), len(a))
 
 
 if __name__ == '__main__':

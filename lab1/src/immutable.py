@@ -92,3 +92,7 @@ def reduce(map, f, initial_state):
         value = map.get(key)
         state = f(state, value)
     return state
+
+
+def get_hash(map, key):
+    return map.get_hash(key)
