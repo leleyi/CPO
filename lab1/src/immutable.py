@@ -36,6 +36,13 @@ def to_list(map):
     return res
 
 
+def from_list(map, list):
+    table = cons(map)
+    for i, v in enumerate(list):
+        table.put(i, v)
+    return table
+
+
 def put(map, key, value):
     table = cons(map)
     table.put(key, value)
@@ -59,10 +66,12 @@ def del_(map, key):
 
 
 def mconcat(map1, map2):
+    if map1 is None and map2 is None:
+        return None
     if map1 is None:
-        return map2
+        return cons(map2)
     if map2 is None:
-        return map1
+        return cons(map1)
     tabel = cons(map1)
     tabel.mconcat(map2)
     return tabel

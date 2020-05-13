@@ -17,11 +17,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(get(put(HashMap(), 1, 2), 1), 2)
         self.assertEqual(get(put(HashMap(), 3, 4), 3), 4)
 
-    def test_size(self):
-        self.assertEqual(size(HashMap()), 0)
-        self.assertEqual(size(HashMap({'3': 23})), 1)
-        self.assertEqual(size(HashMap({'3': 23, '4': 323})), 2)
-
     def test_del_(self):
         self.assertEqual(to_dict(put(HashMap(), 1, 2)), {1: 2})
         self.assertEqual(to_dict(del_(put(HashMap(), 1, 2), 1)), {})
@@ -39,6 +34,11 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(to_list(None), [])
         self.assertEqual(to_list(put(HashMap(), 1, 2)), [2])
         self.assertEqual(to_list(put(put(HashMap(), 1, 2), 2, 3)), [2,3])
+
+    def test_from_list(self):
+        lis = [1, 2]
+        self.assertEqual(to_list(from_list(HashMap(), [])), [])
+        self.assertEqual(to_list(from_list(HashMap(), lis)), lis)
 
     def test_mconcat(self):
         self.assertEqual(mconcat(None, None), None)
@@ -61,6 +61,18 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(to_dict(table), tmp)
         i = iter(HashMap())
         self.assertRaises(StopIteration, lambda: next(i))
+
+    def test_immutability(self):
+        table1 = HashMap()
+        table2 = put(table1, 1, 2)
+        self.assertNotEqual(id(table1), id(table2))
+        table3 = del_(table2, 1)
+        self.assertNotEqual(id(table2), id(table3))
+        table4 = mconcat(table2, table3)
+        self.assertNotEqual(id(table4), id(table2))
+        self.assertNotEqual(id(table4), id(table3))
+        table5 = map(table4, str)
+        self.assertNotEqual(id(table4), id(table5))
 
 
 if __name__ == '__main__':
