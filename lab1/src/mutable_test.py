@@ -33,11 +33,11 @@ class MyTestCase(unittest.TestCase):
 
     def test_size(self):
         table = HashMap()
-        self.assertEqual(table.__len__(), 0)
+        self.assertEqual(len(table), 0)
         table.put(1, 2)
-        self.assertEqual(table.__len__(), 1)
+        self.assertEqual(len(table), 1)
         table.put(2, 3)
-        self.assertEqual(table.__len__(), 2)
+        self.assertEqual(len(table), 2)
 
     def test_to_dict(self):
         table = HashMap()
