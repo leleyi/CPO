@@ -103,30 +103,30 @@ class MyTestCase(unittest.TestCase):
         self.assertRaises(StopIteration, lambda: next(i))
 
     def test_hash_collision(self):
-        table = HashMap()
-        table.put(1, 3)
-        table.put(12, 4)
-        #the collision happen
-        print(table.get_hash(1))
-        print(table.get_hash(12))
-        print(table.get(1))
-        print(table.get(12))
-        self.assertEqual(table.get_hash(1), 1)
-        self.assertEqual(table.get_hash(12), 2)
+        table1 = HashMap()
+        table2 = HashMap()
+        table1.put(1, 3)
+        table2.put(12, 3)
+        self.assertEqual(table1.get_hash(1), table2.get_hash(12))
+        # means the key of 1 and 12 have the same hash_value;
+        # put the the key that have same init_hash_value
+        table1.put(12, 4)
 
+        # now they have different hash_value, beacase the collision happen, to deal the collision the key rehash unit have not coollision
+        self.assertNotEqual(table1.get_hash(12), table2.get_hash(12))
 
-    # @given(st.lists(st.integers())) # the map
-    # def test_from_list_to_list_equality(self, a):
-    #     dict = HashMap()
-    #     dict.from_list(a)
-    #     b = dict.to_list
-    #     self.assertEqual(a, b)
-    #
-    # @given(st.lists(st.integers()))
-    # def test_python_len_and_list_size_equality(self, a):
-    #     dict = HashMap()
-    #     dict.from_list(a)
-    #     self.assertEqual(len(dict), len(a))
+    @given(st.lists(st.integers(), max_size=10))  # the map
+    def test_from_list_to_list_equality(self, a):
+        dict = HashMap()
+        dict.from_list(a)
+        b = dict.to_list()
+        self.assertEqual(a, b)
+
+    @given(st.lists(st.integers(), max_size=10))
+    def test_python_len_and_list_size_equality(self, a):
+        dict = HashMap()
+        dict.from_list(a)
+        self.assertEqual(len(dict), len(a))
 
 
 if __name__ == '__main__':
