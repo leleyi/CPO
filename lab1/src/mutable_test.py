@@ -1,7 +1,10 @@
 import unittest
 
 from mutable import *
-
+from hypothesis import given
+import hypothesis.strategies as st
+from hypothesis import given
+import hypothesis.strategies as st
 
 class MyTestCase(unittest.TestCase):
 
@@ -55,6 +58,17 @@ class MyTestCase(unittest.TestCase):
         table = HashMap(dict)
         self.assertEqual(table.to_list(), [2, 3, 4])
 
+    def test_from_list(self):
+        test_data = [
+            [],
+            ['a'],
+            ['a', 'b']
+        ]
+        for e in test_data:
+            dict = HashMap()
+            dict.from_list(e)
+            self.assertEqual(dict.to_list(), e)
+
     def test_mconcat(self):
         dict1 = {1: 123, 2: 333}
         dict2 = {3: 23, 4: 323}
@@ -88,6 +102,32 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(table.to_dict(), tmp)
         i = iter(HashMap())
         self.assertRaises(StopIteration, lambda: next(i))
+
+    def test_hash_collision(self):
+        table = HashMap()
+        table.put(1, 3)
+        table.put(12, 4)
+        #the collision happen
+        print(table.get_hash(1))
+        print(table.get_hash(12))
+        print(table.get(1))
+        print(table.get(12))
+        self.assertEqual(table.get_hash(1), 1)
+        self.assertEqual(table.get_hash(12), 2)
+
+
+    @given(st.lists(st.integers()))
+    def test_from_list_to_list_equality(self, a):
+        dict = HashMap()
+        dict.from_list(a)
+        b = dict.to_list
+        self.assertEqual(a, b)
+
+    @given(st.lists(st.integers()))
+    def test_python_len_and_list_size_equality(self, a):
+        dict = HashMap()
+        dict.from_list(a)
+        self.assertEqual(len(dict), len(a))
 
 
 if __name__ == '__main__':

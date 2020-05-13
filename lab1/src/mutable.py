@@ -94,12 +94,20 @@ class HashMap(object):
                 return None
 
     """the order is not change"""
+    """from dict"""
+    def from_dic(self, dict):
+        for k, v in dict.items():
+            self.put(int(k), v)
 
     def to_dict(self):
         kvlist = {}
         for item in self.items():
             kvlist[item.key] = item.value
         return kvlist
+
+    def from_list(self, list):
+        for i, v in enumerate(list):
+            self.put(i, v)
 
     def to_list(self):
         res = []
@@ -110,7 +118,6 @@ class HashMap(object):
     """
         get the hash value
     """
-
     def items(self):
         items = []
         for entry in self.kvEntry:
@@ -123,18 +130,27 @@ class HashMap(object):
     def hash(self, key):
         return key % self.size
 
+    def get_hash(self, key):
+        initial_hash = hash_ = self.hash(key)
+        while True:
+            if self.kvEntry[hash_] is self._empty or self.kvEntry[hash_] is self._deleted:
+                # That key was never assigned
+                return hash_
+            elif self.kvEntry[hash_].key == key:
+                # key found
+                return hash_
+            hash_ = self._rehash(hash_)
+            if initial_hash == hash_:
+                # table is full and wrapped around
+                return None
+
+
     """
         open address  (linear probing)
     """
 
     def _rehash(self, old_hash):
         return (old_hash + 1) % self.size
-
-    """put value dict"""
-
-    def put_dic(self, dict):
-        for k, v in dict.items():
-            self.put(int(k), v)
 
     def mempty(self):
         self.kvEntry = [self._empty] * self.size
