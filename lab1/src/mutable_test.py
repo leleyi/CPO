@@ -15,6 +15,10 @@ class MyTestCase(unittest.TestCase):
         table.put(2, 3)
         self.assertEqual(table.get(2), 3)
         self.assertEqual(table.to_dict(), {2: 3})
+        table.put(2, 5)  # update the value to 5;
+        self.assertEqual(table.get(2), 5)
+        table.put(3, 5)  # allow have the same value;
+        self.assertEqual(table.get(3), 5)
 
     def test_del(self):
         table = HashMap()
@@ -115,7 +119,8 @@ class MyTestCase(unittest.TestCase):
         # now they have different hash_value, beacase the collision happen, to deal the collision the key rehash unit have not coollision
         self.assertNotEqual(table1.get_hash(12), table2.get_hash(12))
 
-    @given(st.lists(st.integers(), max_size=10))  # the map
+    # we fixed the max_size because we delete the Capacity Expansion that we have implemented before
+    @given(st.lists(st.integers(), max_size=10))
     def test_from_list_to_list_equality(self, a):
         dict = HashMap()
         dict.from_list(a)

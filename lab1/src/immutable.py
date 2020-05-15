@@ -14,7 +14,6 @@ def size(map):
         return len(map)
 
 """the order is not change"""
-
 def to_dict(map):
     kvlist = {}
     if map is None:
