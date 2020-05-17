@@ -36,6 +36,9 @@ class HashMap(object):
             self.from_dict(dict)
 
     def put(self, key, value):
+        if self._len > self.size - 2:
+            self.capacity_extension()
+
         initial_hash = hash_ = self.hash(key)
 
         while True:
@@ -95,6 +98,7 @@ class HashMap(object):
 
     """the order is not change"""
     """from dict"""
+
     def from_dict(self, dict):
         for k, v in dict.items():
             self.put(int(k), v)
@@ -118,6 +122,7 @@ class HashMap(object):
     """
         get the hash value
     """
+
     def items(self):
         items = []
         for entry in self.kvEntry:
@@ -144,7 +149,6 @@ class HashMap(object):
                 # table is full and wrapped around
                 return None
 
-
     """
         open address  (linear probing)
     """
@@ -152,10 +156,17 @@ class HashMap(object):
     def _rehash(self, old_hash):
         return (old_hash + 1) % self.size
 
+    def capacity_extension(self):
+        self.kvEntry.extend([self._empty] * self.size)
+        self._keyset.extend([] * self.size)
+        self.size = 2 * self.size
+
     def mempty(self):
         self.kvEntry = [self._empty] * self.size
 
     def mconcat(self, other):
+        if other is None:
+            return self
         for key in other._keyset:
             value = other.get(key)
             self.put(key, value)
@@ -205,3 +216,6 @@ class HashMap(object):
             else:
                 res = res + str(entry.key) + ":" + str(entry.value) + ","
         return "{" + res[0:-1] + "}"
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__

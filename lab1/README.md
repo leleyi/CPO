@@ -4,7 +4,6 @@
 * **laboratory work number** : PLMM 5 
 * **variant description** :  Hash-map (collision resolution: open addressing)
 * **list of group members** : Liu Jun ; Wang Xin Yue
-* **synopsis**:
 
 #### contribution
 * contribution summary for each group member (should be checkable by git log and git blame);

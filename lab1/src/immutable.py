@@ -13,7 +13,10 @@ def size(map):
     else:
         return len(map)
 
+
 """the order is not change"""
+
+
 def to_dict(map):
     kvlist = {}
     if map is None:
@@ -35,8 +38,14 @@ def to_list(map):
     return res
 
 
-def from_list(map, list):
-    table = cons(map)
+# def from_list(map, list):
+#     table = cons(map)
+#     for i, v in enumerate(list):
+#         table.put(i, v)
+#     return table
+
+def from_list(list):
+    table = HashMap()
     for i, v in enumerate(list):
         table.put(i, v)
     return table
@@ -95,3 +104,7 @@ def reduce(map, f, initial_state):
 
 def get_hash(map, key):
     return map.get_hash(key)
+
+
+def __eq__(a, b):
+    return a.__dict__ == b.__dict__

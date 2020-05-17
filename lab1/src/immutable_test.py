@@ -35,12 +35,12 @@ class MyTestCase(unittest.TestCase):
     def test_to_list(self):
         self.assertEqual(to_list(None), [])
         self.assertEqual(to_list(put(HashMap(), 1, 2)), [2])
-        self.assertEqual(to_list(put(put(HashMap(), 1, 2), 2, 3)), [2,3])
+        self.assertEqual(to_list(put(put(HashMap(), 1, 2), 2, 3)), [2, 3])
 
     def test_from_list(self):
         lis = [1, 2]
-        self.assertEqual(to_list(from_list(HashMap(), [])), [])
-        self.assertEqual(to_list(from_list(HashMap(), lis)), lis)
+        self.assertEqual(to_list(from_list([])), [])
+        self.assertEqual(to_list(from_list(lis)), lis)
 
     def test_mconcat(self):
         self.assertEqual(mconcat(None, None), None)
@@ -89,18 +89,37 @@ class MyTestCase(unittest.TestCase):
         # now they have different hash_value, beacase the collision happen, to deal the collision the key rehash unit have not coollision
         self.assertNotEqual(get_hash(table1, 12), get_hash(table2, 12))
 
-    @given(st.lists(st.integers(), max_size=10))  # the map
+    @given(st.lists(st.integers()))  # the map
     def test_from_list_to_list_equality(self, a):
-        dict = HashMap()
-        dict = from_list(dict, a)
+        dict = from_list(a)
         b = to_list(dict)
         self.assertEqual(a, b)
 
-    @given(st.lists(st.integers(), max_size=10))
+    @given(st.lists(st.integers()))
     def test_python_len_and_list_size_equality(self, a):
-        dict = HashMap()
-        dict  = from_list(dict, a)
+        dict = from_list(a)
         self.assertEqual(len(dict), len(a))
+
+    @given(st.lists(st.integers()))
+    def test_monoid_identity(self, lst):
+        a = from_list(lst)
+        self.assertEqual(mconcat(None, a), a)
+        self.assertEqual(mconcat(a, None), a)
+
+    @given(st.lists(st.integers()))
+    def test_from_list(self, lst):
+        a = from_list(lst)
+        self.assertEqual(to_list(a), lst)
+
+    @given(st.lists(st.integers()))
+    def test_to_list(self, lst):
+        a = from_list(lst)
+        self.assertEqual(to_list(a), lst)
+
+    @given(key=st.integers(), value=st.integers())
+    def test_put(self, key, value):
+        dict = put(HashMap(), key, value)
+        self.assertEqual(get(dict, key), value)
 
 
 if __name__ == '__main__':

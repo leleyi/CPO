@@ -56,11 +56,6 @@ class MyTestCase(unittest.TestCase):
         table = HashMap(dict)
         self.assertEqual(table.to_dict(), dict)
 
-    def test_to_list(self):
-        dict = {1: 2, 2: 3, 3: 4}
-        table = HashMap(dict)
-        self.assertEqual(table.to_list(), [2, 3, 4])
-
     def test_from_list(self):
         test_data = [
             [],
@@ -71,6 +66,11 @@ class MyTestCase(unittest.TestCase):
             dict = HashMap()
             dict.from_list(e)
             self.assertEqual(dict.to_list(), e)
+
+    def test_to_list(self):
+        dict = {1: 2, 2: 3, 3: 4}
+        table = HashMap(dict)
+        self.assertEqual(table.to_list(), [2, 3, 4])
 
     def test_mconcat(self):
         dict1 = {1: 123, 2: 333}
@@ -120,18 +120,40 @@ class MyTestCase(unittest.TestCase):
         self.assertNotEqual(table1.get_hash(12), table2.get_hash(12))
 
     # we fixed the max_size because we delete the Capacity Expansion that we have implemented before
-    @given(st.lists(st.integers(), max_size=10))
+    @given(st.lists(st.integers()))
     def test_from_list_to_list_equality(self, a):
         dict = HashMap()
         dict.from_list(a)
         b = dict.to_list()
         self.assertEqual(a, b)
 
-    @given(st.lists(st.integers(), max_size=10))
+    @given(st.lists(st.integers()))
     def test_python_len_and_list_size_equality(self, a):
         dict = HashMap()
         dict.from_list(a)
         self.assertEqual(len(dict), len(a))
+
+    @given(a=st.lists(st.integers()), b=st.lists(st.integers()))
+    def test_monoid_identity(self, a, b):
+        dict_a = HashMap()
+        dict_b = HashMap()
+        dict_a.from_list(a)
+        dict_b.from_list(b)
+        self.assertEqual(dict_a.mconcat(None), dict_a)
+        self.assertEqual(dict_a.mconcat(dict_b), dict_b.mconcat(dict_b))
+
+
+    @given(st.lists(st.integers()))
+    def test_from_list(self, a):
+        dict = HashMap()
+        dict.from_list(a)
+        self.assertEqual(dict.to_list(), a)
+
+    @given(a=st.integers(), b=st.integers())
+    def test_put(self, a, b):
+        table = HashMap()
+        table.put(a, b)
+        self.assertEqual(table.get(a), b)
 
 
 if __name__ == '__main__':
