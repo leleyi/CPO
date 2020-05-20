@@ -137,10 +137,15 @@ def mconcat(map1, map2):
     :param map2: HashMap
     :return: HashMap
     """
+    if map1 is None and map2 is None:
+        return None
+    if map1 is None:
+        return cons(map2)
+    if map2 is None:
+        return cons(map1)
+
     table1 = cons(map1)
     table2 = cons(map2)
-    if table1 is None:
-        return table2
 
     if table2 is not None:
         for key in table2._keyset:
