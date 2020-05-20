@@ -246,7 +246,7 @@ class HashMap(object):
         :return: map
         """
         if self is None:
-            return other
+            self = other
 
         if other is not None:
             for key in other._keyset:
@@ -310,4 +310,8 @@ class HashMap(object):
         return "{" + res[0:-1] + "}"
 
     def __eq__(self, other):
+        # if other is None and self is None:
+        #     return True
+        # if other is not None or self is not None:
+        #     return False
         return self.__dict__ == other.__dict__
