@@ -1,119 +1,175 @@
+import org.junit.Test;
+
+import java.awt.*;
 
 public class ThompsonConstruction {
 
-    String regularExpr = "[.]";
     private Lexer lexer = null;
 
     private NfaMachineConstructor nfaMachineConstructor = null;
     private NfaPrinter nfaPrinter = new NfaPrinter();
 
 
-    private void runLexerExample() {
-        lexer = new Lexer(regularExpr);
-        int exprCount = 0;
-        System.out.println("当前正则解析的正则表达式: " + regularExpr);
-        lexer.advance();
-        printLexResult();
-    }
+    /**
+     * variant 6  \, ^, ., $, *, +, [ ], [^ ], { }.
+     * [] [^] . * + , ^         \ ^ {} $
+     *
+     * @throws Exception
+     */
 
-    private void printLexResult() {
-        while (lexer.matchToken(Lexer.Token.EOS) == false) {
-            System.out.println("当前识别字符是: " + (char) lexer.getLexeme());
 
-            if (lexer.matchToken(Lexer.Token.L) != true) {
-                System.out.println("当前字符具有特殊含义");
+    NfaMachineConstructor.NfaPair pair = new NfaMachineConstructor.NfaPair();
 
-                printMetaCharMeaning(lexer);
-            } else {
-                System.out.println("当前字符是普通字符常量");
-            }
-            lexer.advance();
-        }
-    }
 
-    private void printMetaCharMeaning(Lexer lexer) {
-        String s = "";
-        if (lexer.matchToken(Lexer.Token.ANY)) {
-            s = "当前字符是点通配符";
-        }
-
-        if (lexer.matchToken(Lexer.Token.AT_BOL)) {
-            s = "当前字符是开头匹配符";
-        }
-
-        if (lexer.matchToken(Lexer.Token.AT_EOL)) {
-            s = "当前字符是末尾匹配符";
-        }
-
-        if (lexer.matchToken(Lexer.Token.CCL_END)) {
-            s = "当前字符是字符集类结尾括号";
-        }
-
-        if (lexer.matchToken(Lexer.Token.CCL_START)) {
-            s = "当前字符是字符集类的开始括号";
-        }
-
-        if (lexer.matchToken(Lexer.Token.CLOSE_CURLY)) {
-            s = "当前字符是结尾大括号";
-        }
-
-        if (lexer.matchToken(Lexer.Token.CLOSE_PAREN)) {
-            s = "当前字符是结尾圆括号";
-        }
-
-        if (lexer.matchToken(Lexer.Token.DASH)) {
-            s = "当前字符是横杆";
-        }
-
-        if (lexer.matchToken(Lexer.Token.OPEN_CURLY)) {
-            s = "当前字符是起始大括号";
-        }
-
-        if (lexer.matchToken(Lexer.Token.OPEN_PAREN)) {
-            s = "当前字符是起始圆括号";
-        }
-
-        if (lexer.matchToken(Lexer.Token.OPTIONAL)) {
-            s = "当前字符是单字符匹配符?";
-        }
-
-        if (lexer.matchToken(Lexer.Token.OR)) {
-            s = "当前字符是或操作符";
-        }
-
-        if (lexer.matchToken(Lexer.Token.PLUS_CLOSE)) {
-            s = "当前字符是正闭包操作符";
-        }
-
-        if (lexer.matchToken(Lexer.Token.CLOSURE)) {
-            s = "当前字符是闭包操作符";
-        }
-
-        System.out.println(s);
-    }
-
-    private void runNfaMachineConstructorExample() throws Exception {
-        lexer = new Lexer("[2-9]*qq.com");
-
+    /**
+     * \\*
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_star_closure() throws Exception {
+        lexer = new Lexer("3*");
         nfaMachineConstructor = new NfaMachineConstructor(lexer);
+        nfaMachineConstructor.complie(pair);
+        NfaIntepretor nfaIntepretor = new NfaIntepretor(pair.startNode, "333");
+        String o = nfaIntepretor.match();
+        assert o.equals("333");
+    }
 
-        NfaMachineConstructor.NfaPair pair = new NfaMachineConstructor.NfaPair();
-//        nfaMachineConstructor.constructNfaForSingleCharacter(pair);
-//        nfaMachineConstructor.constructNfaForCharacterSet(pair);
-        nfaMachineConstructor.cat_expr(pair);
-//        nfaMachineConstructor.constructNfaDefineNumCharacterSet(pair);
-        nfaPrinter.printNfa(pair.startNode);
+    /**
+     * +
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_plus_closure() throws Exception {
+        lexer = new Lexer("3+");
+        nfaMachineConstructor = new NfaMachineConstructor(lexer);
+        nfaMachineConstructor.complie(pair);
+        NfaIntepretor nfaIntepretor = new NfaIntepretor(pair.startNode, "33");
+        String o = nfaIntepretor.match();
+        assert o.equals("33");
+    }
 
-        NfaIntepretor nfaIntepretor = new NfaIntepretor(pair.startNode, "65qq.com");
-        nfaIntepretor.match();
-
+    /***
+     * \\.
+     * @throws Exception
+     */
+    @Test
+    public void test_dot_closure() throws Exception {
+        lexer = new Lexer("3.");
+        nfaMachineConstructor = new NfaMachineConstructor(lexer);
+        nfaMachineConstructor.complie(pair);
+        NfaIntepretor nfaIntepretor = new NfaIntepretor(pair.startNode, "32");
+        String o = nfaIntepretor.match();
+        assert o.equals("32");
     }
 
 
-    public static void main(String[] args) throws Exception {
-        ThompsonConstruction construction = new ThompsonConstruction();
-//        construction.runLexerExample();
-        construction.runNfaMachineConstructorExample();
+    /**
+     * []
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_CCL_closure() throws Exception {
+        lexer = new Lexer("[1-9]");
+        nfaMachineConstructor = new NfaMachineConstructor(lexer);
+        nfaMachineConstructor.complie(pair);
+        NfaIntepretor nfaIntepretor = new NfaIntepretor(pair.startNode, "8");
+        String o = nfaIntepretor.match();
+        assert o.equals("8");
+    }
+
+    /**
+     * [^]
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_ACCL_closure() throws Exception {
+        lexer = new Lexer("[^1-8]");
+        nfaMachineConstructor = new NfaMachineConstructor(lexer);
+        nfaMachineConstructor.complie(pair);
+        NfaIntepretor nfaIntepretor1 = new NfaIntepretor(pair.startNode, "9");
+        NfaIntepretor nfaIntepretor2 = new NfaIntepretor(pair.startNode, "8");
+        String o1 = nfaIntepretor1.match();
+        String o2 = nfaIntepretor2.match();
+        assert o1.equals("9");
+        assert o2.equals("");
 
     }
+
+    /**
+     * ^
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_AT_B() throws Exception {
+        lexer = new Lexer("^8");
+        nfaMachineConstructor = new NfaMachineConstructor(lexer);
+        nfaMachineConstructor.complie(pair);
+        NfaIntepretor nfaIntepretor1 = new NfaIntepretor(pair.startNode, "8.com");
+        String o = nfaIntepretor1.match();
+        assert "8".equals(o);
+    }
+
+    /**
+     * $
+     * @throws Exception
+     */
+    @Test
+    public void test_AT_E() throws Exception {
+        lexer = new Lexer("[1-9]*a$");
+        nfaMachineConstructor = new NfaMachineConstructor(lexer);
+        nfaMachineConstructor.complie(pair);
+        NfaIntepretor nfaIntepretor1 = new NfaIntepretor(pair.startNode, "556a$");
+        String o = nfaIntepretor1.match();
+        System.out.println(o);
+        assert "556a".equals(o);
+    }
+
+    /**
+     * test match method
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_match_method() throws Exception {
+        lexer = new Lexer("[1-9]*qq.[a-z]*");
+        nfaMachineConstructor = new NfaMachineConstructor(lexer);
+        nfaMachineConstructor.complie(pair);
+        NfaIntepretor nfaIntepretor1 = new NfaIntepretor(pair.startNode, "6545qq.com");
+        String o = nfaIntepretor1.match();
+        assert o.equals("6545qq.com");
+    }
+
+    /**
+     * test sub method
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_sub_method() throws Exception {
+        lexer = new Lexer("[1-9]*qq.[a-z]*");
+        nfaMachineConstructor = new NfaMachineConstructor(lexer);
+        nfaMachineConstructor.complie(pair);
+        NfaIntepretor nfaIntepretor1 = new NfaIntepretor(pair.startNode, "6545qq.comabcdefg999");
+        String sub = nfaIntepretor1.sub("11111");
+        System.out.println(sub);
+        assert "11111999".equals(sub);
+    }
+
+
+    /**
+     * test
+     *
+     * @param args
+     * @throws Exception
+     */
+
+
+
+
 }
