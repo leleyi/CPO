@@ -140,8 +140,25 @@ class MyTestCase(unittest.TestCase):
         dict_a.from_list(a)
         dict_b.from_list(b)
         self.assertEqual(dict_a.mconcat(None), dict_a)
-        self.assertEqual(dict_a.mconcat(dict_b), dict_b.mconcat(dict_b))
+        self.assertEqual(dict_a.mconcat(dict_b), dict_b.mconcat(dict_a))
 
+    @given(a=st.lists(st.integers()), b=st.lists(st.integers()), c=st.lists(st.integers()))
+    def test_monoid_associativity(self, a, b, c):
+        dict_a = HashMap()
+        dict_b = HashMap()
+        dict_c = HashMap()
+        dict_a.from_list(a)  # {}
+        dict_b.from_list(b)  # {}
+        dict_c.from_list(c)  # {0 0}
+        a_b = dict_a.mconcat(dict_b)  # {}
+        b_a = dict_b.mconcat(dict_a)  # {}
+        self.assertEqual(a_b, b_a)
+        c_b = dict_c.mconcat(dict_b)  # {0,0}
+        b_c = dict_b.mconcat(dict_c)  # {0,0}
+        self.assertEqual(c_b, b_c)
+        a_b__c = dict_c.mconcat(a_b)
+        a__b_c = dict_a.mconcat(b_c)
+        self.assertEqual(a_b__c, a__b_c)
 
     @given(st.lists(st.integers()))
     def test_from_list(self, a):

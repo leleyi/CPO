@@ -44,7 +44,6 @@ class HashMap(object):
         if dict is not None:
             self.from_dict(dict)
 
-
     def put(self, key, value):
         """
 
@@ -152,8 +151,12 @@ class HashMap(object):
         add the map value from list make the i,v(enumerate) to the k and v
         :param list: list like [1,2,31,5]
         """
-        for i, v in enumerate(list):
-            self.put(i, v)
+        if list:
+
+            for i, v in enumerate(list):
+                self.put(i, v)
+        else:
+            return self
 
     def to_list(self):
         """
@@ -242,11 +245,13 @@ class HashMap(object):
         :param other:  map
         :return: map
         """
-        if other is None:
-            return self
-        for key in other._keyset:
-            value = other.get(key)
-            self.put(key, value)
+        if self is None:
+            return other
+
+        if other is not None:
+            for key in other._keyset:
+                value = other.get(key)
+                self.put(key, value)
 
     def map(self, f):
         """
