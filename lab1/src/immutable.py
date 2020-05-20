@@ -1,4 +1,4 @@
-from mutable import *
+from lab1.src.mutable import *
 
 
 def cons(map):
@@ -137,15 +137,24 @@ def mconcat(map1, map2):
     :param map2: HashMap
     :return: HashMap
     """
-    if map1 is None and map2 is None:
-        return None
-    if map1 is None:
-        return cons(map2)
-    if map2 is None:
-        return cons(map1)
-    tabel = cons(map1)
-    tabel.mconcat(map2)
-    return tabel
+    table1 = cons(map1)
+    table2 = cons(map2)
+    if table1 is None:
+        return table2
+
+    if table2 is not None:
+        for key in table2._keyset:
+            if(table1.get(key)!=None):
+                value1 = table1.get(key)
+                value2 = table2.get(key)
+                if(value1 < value2):
+                    table1.put(key, value1)
+                else:
+                    table1.put(key, value2)
+            else:
+                value = table2.get(key)
+                table1.put(key, value)
+    return table1
 
 
 def map(map, f):

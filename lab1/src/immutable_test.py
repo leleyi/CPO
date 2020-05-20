@@ -1,5 +1,5 @@
 import unittest
-from immutable import *
+from lab1.src.immutable import *
 from hypothesis import given
 import hypothesis.strategies as st
 
@@ -120,6 +120,21 @@ class MyTestCase(unittest.TestCase):
     def test_put(self, key, value):
         dict = put(HashMap(), key, value)
         self.assertEqual(get(dict, key), value)
+
+    @given(a=st.lists(st.integers()), b=st.lists(st.integers()), c=st.lists(st.integers()))
+    def test_monoid_associativity(self, a, b, c):
+        dict_a = from_list(a)  # {}
+        dict_b = from_list(b)  # {0:0}
+        dict_c = from_list(c)  # {0:1}
+        a_b = mconcat(dict_a, dict_b)  # {0:0}
+        b_a = mconcat(dict_b, dict_a)  # {0:0}
+        self.assertEqual(to_dict(a_b), to_dict(b_a))
+        c_b = mconcat(dict_c, dict_b)  # {0:0}
+        b_c = mconcat(dict_b, dict_c)  # {0:0}
+        self.assertEqual(to_dict(c_b), to_dict(b_c))
+        a_b__c = mconcat(dict_c, a_b)
+        a__b_c = mconcat(dict_a, b_c)
+        self.assertEqual(to_dict(a_b__c), to_dict(a__b_c))
 
 
 if __name__ == '__main__':
