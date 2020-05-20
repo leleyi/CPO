@@ -1,5 +1,10 @@
 class Node:
     def __init__(self, key, value):
+        """
+        init the map node
+        :param key: key value
+        :param value: value
+        """
         self.key = key
         self.value = value
 
@@ -26,6 +31,10 @@ class HashMap(object):
     _deleted = object()
 
     def __init__(self, dict=None):
+        """
+
+        :param dict: init_the map by a dict if dict is not null
+        """
         self.size = 11
         self._len = 0
         self.kvEntry = [self._empty] * self.size
@@ -35,7 +44,14 @@ class HashMap(object):
         if dict is not None:
             self.from_dict(dict)
 
+
     def put(self, key, value):
+        """
+
+        :param key: map key_value
+        :param value:map value
+        :return:
+        """
         if self._len > self.size - 2:
             self.capacity_extension()
 
@@ -60,10 +76,19 @@ class HashMap(object):
                 raise ValueError("Table is full")
 
     def put_entry(self, entry):
+        """
+        put a k_v entry
+        :param entry: a k_v node
+        """
         key = entry.key, value = entry.value
         self.put(key, value)
 
     def get(self, key):
+        """
+        get the storage value in map where key = key
+        :param key: key
+        :return: map value
+        """
         initial_hash = hash_ = self.hash(key)
         while True:
             if self.kvEntry[hash_] is self._empty or self.kvEntry[hash_] is self._deleted:
@@ -79,6 +104,11 @@ class HashMap(object):
                 return None
 
     def del_(self, key):
+        """
+        delete the map node in map where the key = key
+        :param key: map value
+        :return:  map value
+        """
         initial_hash = hash_ = self.hash(key)
         while True:
             if self.kvEntry[hash_] is self._empty or self.kvEntry[hash_] is self._deleted:
@@ -100,20 +130,36 @@ class HashMap(object):
     """from dict"""
 
     def from_dict(self, dict):
+        """
+        insert the data from the python dictionary type
+        :param dict: {key, value}
+        """
         for k, v in dict.items():
             self.put(int(k), v)
 
     def to_dict(self):
+        """
+        convert this map to the dict {}
+        :return: {key, value}
+        """
         kvlist = {}
         for item in self.items():
             kvlist[item.key] = item.value
         return kvlist
 
     def from_list(self, list):
+        """
+        add the map value from list make the i,v(enumerate) to the k and v
+        :param list: list like [1,2,31,5]
+        """
         for i, v in enumerate(list):
             self.put(i, v)
 
     def to_list(self):
+        """
+        make this map to a list. just use the values in the map
+        :return: []
+        """
         res = []
         for key in self._keyset:
             res.append(self.get(key))
@@ -124,6 +170,10 @@ class HashMap(object):
     """
 
     def items(self):
+        """
+        get all the items in the map
+        :return: items []
+        """
         items = []
         for entry in self.kvEntry:
             if entry is self._empty or entry is self._deleted:
@@ -133,9 +183,19 @@ class HashMap(object):
         return items
 
     def hash(self, key):
+        """
+        get the hash value by the method
+        :param key: key
+        :return: hash_value
+        """
         return key % self.size
 
     def get_hash(self, key):
+        """
+        get the hash_value that had saved the map
+        :param key:
+        :return:
+        """
         initial_hash = hash_ = self.hash(key)
         while True:
             if self.kvEntry[hash_] is self._empty or self.kvEntry[hash_] is self._deleted:
@@ -154,17 +214,34 @@ class HashMap(object):
     """
 
     def _rehash(self, old_hash):
+        """
+        if the hash collision happened should invoke this method
+        :param old_hash: the hash_value collision
+        :return: new hash_value
+        """
         return (old_hash + 1) % self.size
 
     def capacity_extension(self):
+        """
+        if the capacity is not enough extension the capacity
+        size = size * 2
+        """
         self.kvEntry.extend([self._empty] * self.size)
         self._keyset.extend([] * self.size)
         self.size = 2 * self.size
 
     def mempty(self):
+        """
+        clear the map
+        """
         self.kvEntry = [self._empty] * self.size
 
     def mconcat(self, other):
+        """
+        concat two maps to one
+        :param other:  map
+        :return: map
+        """
         if other is None:
             return self
         for key in other._keyset:
@@ -172,12 +249,22 @@ class HashMap(object):
             self.put(key, value)
 
     def map(self, f):
+        """
+        map the map element to the f
+        :param f: the function to map
+        """
         for key in self._keyset:
             value = self.get(key)
             value = f(value)
             self.put(key, value)
 
     def reduce(self, f, initial_state):
+        """
+        reduce the mapSet to one value
+        :param f: the reduce method
+        :param initial_state:result initial_state
+        :return:final res
+        """
         state = initial_state
         for key in self._keyset:
             value = self.get(key)
