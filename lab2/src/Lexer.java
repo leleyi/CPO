@@ -3,6 +3,10 @@
  * @author author
  */
 public class Lexer {
+    public int getCharIndex() {
+        return charIndex;
+    }
+
     /**
      * variant 6  \, ^, ., $, *, +, [ ], [^ ], { }.
      */

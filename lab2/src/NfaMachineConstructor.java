@@ -25,20 +25,20 @@ public class NfaMachineConstructor {
 
     public void expr(NfaPair pairOut) throws Exception {
         /*
-         * expr 由一个或多个cat_expr 之间进行 OR 形成
-         * 如果表达式只有一个cat_expr 那么expr 就等价于cat_expr
-         * 如果表达式由多个cat_expr做或连接构成那么 expr-> cat_expr | cat_expr | ....
+         * expr 由一个或多个complie 之间进行 OR 形成
+         * 如果表达式只有一个complie 那么expr 就等价于complie
+         * 如果表达式由多个complie做或连接构成那么 expr-> complie | complie | ....
          * 由此得到expr的语法描述为:
-         * expr -> expr OR cat_expr
-         *         | cat_expr
+         * expr -> expr OR complie
+         *         | complie
          *
          */
-        cat_expr(pairOut);
+        complie(pairOut);
         NfaPair localPair = new NfaPair();
 
         while (lexer.matchToken(Lexer.Token.OR)) {
             lexer.advance();
-            cat_expr(localPair);
+            complie(localPair);
 
             Nfa startNode = nfaManager.newNfa();
             startNode.next2 = localPair.startNode;
@@ -54,13 +54,16 @@ public class NfaMachineConstructor {
     }
 
 
-    public void cat_expr(NfaPair pairOut) throws Exception {
+    public void complie(NfaPair pairOut) throws Exception {
         /*
-         * cat_expr -> factor factor .....
-         * 由于多个factor 前后结合就是一个cat_expr所以
-         * cat_expr-> factor cat_expr
+         * complie -> factor factor .....
+         * 由于多个factor 前后结合就是一个complie所以
+         * complie-> factor complie
          */
         // if it can be cat
+
+        boolean b = constructNfaABSingleCharacter(pairOut);
+
         if (first_in_cat(lexer.getCurrentToken())) {
             factor(pairOut);
         }
@@ -75,7 +78,7 @@ public class NfaMachineConstructor {
 
             pairOut.endNode = pairLocal.endNode;
         }
-
+        constructNfaAESingleCharacter(pairOut);
 
     }
 
@@ -98,8 +101,9 @@ public class NfaMachineConstructor {
                 ErrorHandler.parseErr(ErrorHandler.Error.E_BRACKET);
                 return false;
             case AT_BOL:
-                //^必须在表达式的最开始
+                //^必须在表达式的最开始/
                 ErrorHandler.parseErr(ErrorHandler.Error.E_BOL);
+
                 return false;
         }
         return true;
@@ -388,6 +392,37 @@ public class NfaMachineConstructor {
     }
 
     /**
+     * ^
+     *
+     * @param pairOut
+     * @return
+     * @throws Exception
+     */
+    boolean constructNfaABSingleCharacter(NfaPair pairOut) throws Exception {
+
+        if (lexer.matchToken(Lexer.Token.AT_BOL) || lexer.getCharIndex() == 0) {
+            lexer.advance();
+            constructNfaForSingleCharacter(pairOut);
+        }
+        return true;
+    }
+
+    /**
+     * $
+     *
+     * @param pairOut
+     * @return
+     * @throws Exception
+     */
+    boolean constructNfaAESingleCharacter(NfaPair pairOut) throws Exception {
+
+        if (lexer.matchToken(Lexer.Token.AT_EOL)) {
+            return true;
+        }
+        return true;
+    }
+
+    /**
      * construct item{n, m} NFA
      *
      * @return
@@ -421,18 +456,6 @@ public class NfaMachineConstructor {
         if (!lexer.matchToken(Lexer.Token.CLOSE_CURLY)) {
             throw new Exception("expressiong is error!");
         }
-//        start.setConstrain();
-//        if (max == -1) {
-//
-//            for (int i = 0; i < min; i++) {
-//
-//                start = pairOut.startNode = nfaManager.newNfa();
-//                pairOut.endNode = pairOut.startNode.next = nfaManager.newNfa();
-//                start.setEdge(lexer.getLexeme());
-//            }
-//        } else {
-//
-//        }
 
         lexer.advance();
 

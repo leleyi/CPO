@@ -13,7 +13,6 @@ public class NfaIntepretor {
         this.str = string;
     }
 
-
     private Set<Nfa> e_closure(Set<Nfa> input) {
         /*
          * 计算input集合中nfa节点所对应的ε闭包，
@@ -54,7 +53,6 @@ public class NfaIntepretor {
 
     private String strFromNfaSet(Set<Nfa> input) {
         StringBuilder s = new StringBuilder();
-
         Iterator it = input.iterator();
         while (it.hasNext()) {
             s.append(((Nfa) it.next()).getStateNum());
@@ -62,7 +60,6 @@ public class NfaIntepretor {
                 s.append(",");
             }
         }
-
         return s.toString();
     }
 
@@ -80,13 +77,11 @@ public class NfaIntepretor {
             System.out.print("move({ " + strFromNfaSet(input) + " }, '" + c + "')= ");
             System.out.println("{ " + strFromNfaSet(outSet) + " }");
         }
-
         return outSet;
     }
 
-    void match() {
+    String match() {
         //从控制台读入要解读的字符串
-
         Set<Nfa> next = new HashSet<Nfa>();
         next.add(start);
         e_closure(next);
@@ -103,7 +98,13 @@ public class NfaIntepretor {
             }
             inputStr.append(ch);
         }
+
         System.out.println("The Nfa Machine can recognize string: " + inputStr);
+        return inputStr.toString();
+    }
+
+    String sub(String to) {
+        return str.replaceAll(match(), to);
     }
 
     private boolean hasAcceptState(Set<Nfa> input) {
