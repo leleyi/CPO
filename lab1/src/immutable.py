@@ -1,7 +1,7 @@
 from lab1.src.mutable import *
 
 
-def cons(map):
+def cons(map) -> HashMap:
     """
     Copy a hash map
 
@@ -13,7 +13,7 @@ def cons(map):
     return table
 
 
-def size(map):
+def size(map) -> int:
     """
     Get the size of the hash map
 
@@ -26,7 +26,7 @@ def size(map):
         return len(map)
 
 
-def to_dict(map):
+def to_dict(map) -> {}:
     """
     Convert hash map to dictionary
 
@@ -44,7 +44,7 @@ def to_dict(map):
     return kvlist
 
 
-def to_list(map):
+def to_list(map) -> list:
     """
     Convert hash map to list
 
@@ -65,7 +65,7 @@ def to_list(map):
 #         table.put(i, v)
 #     return table
 
-def from_list(list):
+def from_list(list) -> HashMap:
     """
     Convert list to hash map
 
@@ -78,7 +78,7 @@ def from_list(list):
     return table
 
 
-def put(map, key, value):
+def put(map, key, value) -> HashMap:
     """
     Insert key-value pairs into hash map
 
@@ -116,7 +116,7 @@ def put_dic(map, **kwargs):
     return table
 
 
-def del_(map, key):
+def del_(map, key) -> HashMap:
     """
     Delete the value of the given key from the hash map
 
@@ -129,7 +129,7 @@ def del_(map, key):
     return table
 
 
-def mconcat(map1, map2):
+def mconcat(map1, map2) -> HashMap:
     """
     concat two maps to one
 
@@ -149,10 +149,10 @@ def mconcat(map1, map2):
 
     if table2 is not None:
         for key in table2._keyset:
-            if(table1.get(key)!=None):
+            if (table1.get(key) != None):
                 value1 = table1.get(key)
                 value2 = table2.get(key)
-                if(value1 < value2):
+                if (value1 < value2):
                     table1.put(key, value1)
                 else:
                     table1.put(key, value2)
@@ -162,7 +162,7 @@ def mconcat(map1, map2):
     return table1
 
 
-def map(map, f):
+def map(map, f) -> HashMap:
     """
     map the map element to the f
 
@@ -194,7 +194,7 @@ def reduce(map, f, initial_state):
     return state
 
 
-def get_hash(map, key):
+def get_hash(map, key) -> int:
     """
     get the hash_value that had saved the map
 

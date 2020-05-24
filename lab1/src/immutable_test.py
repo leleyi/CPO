@@ -76,6 +76,18 @@ class MyTestCase(unittest.TestCase):
         table5 = map(table4, str)
         self.assertNotEqual(id(table4), id(table5))
 
+    @given(a=st.lists(st.integers()), b=st.lists(st.integers()), key=st.integers(), value=st.integers())
+    def test_immutable(self, a, b, key, value):
+        table = from_list(a)
+        table1 = put(table, key, value)
+        self.assertNotEqual(id(table), id(table1))
+        table3 = del_(table, key)
+        self.assertNotEqual(id(table1), id(table3))
+        table4 = from_list(b)
+        table5 = mconcat(table3, table4)
+        table6 = mconcat(table4, table3)
+        self.assertNotEqual(id(table5), id(table6))
+
     def test_hash_collision(self):
         table1 = HashMap()
         table2 = HashMap()
@@ -135,6 +147,10 @@ class MyTestCase(unittest.TestCase):
         a_b__c = mconcat(dict_c, a_b)
         a__b_c = mconcat(dict_a, b_c)
         self.assertEqual(to_dict(a_b__c), to_dict(a__b_c))
+
+        self.assertEqual(mconcat(None, None), None)
+        self.assertEqual(mconcat(None, dict_a), dict_a)
+        self.assertEqual(mconcat(dict_a, None), dict_a)
 
 
 if __name__ == '__main__':
