@@ -23,15 +23,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(to_dict(put(HashMap(), 1, 2)), {1: 2})
         self.assertEqual(to_dict(del_(put(HashMap(), 1, 2), 1)), {})
 
-    def test_to_dict(self):
-        self.assertEqual(to_dict(None), {})
-        self.assertEqual(to_dict(put(HashMap(), 1, 2)), {1: 2})
-        self.assertEqual(to_dict(put(put(HashMap(), 1, 2), 2, 3)), {1: 2, 2: 3})
-
-    def test_from_dict(self):
-        test_data = {1: 2, 2: 3, 3: 4}
-        self.assertEqual(to_dict(HashMap(test_data)), test_data)
-
     def test_to_list(self):
         self.assertEqual(to_list(None), [])
         self.assertEqual(to_list(put(HashMap(), 1, 2)), [2])

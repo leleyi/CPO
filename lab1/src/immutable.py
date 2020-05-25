@@ -104,7 +104,7 @@ def get(map, key):
     return map.get(key)
 
 
-def put_dic(map, **kwargs):
+def put_dic(map, **kwargs) ->HashMap:
     """
     Convert dict to hash map
 
