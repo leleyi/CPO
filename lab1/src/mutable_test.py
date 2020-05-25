@@ -43,19 +43,6 @@ class MyTestCase(unittest.TestCase):
         table.put(2, 3)
         self.assertEqual(len(table), 2)
 
-    def test_to_dict(self):
-        table = HashMap()
-        table.put(4, 5)
-        dict1 = {1: 2, 2: 3, 3: 4}
-        table.from_dict(dict1)
-        dict2 = {1: 2, 2: 3, 3: 4, 4: 5}
-        self.assertEqual(table.to_dict(), dict2)
-
-    def test_from_dict(self):
-        dict = {1: 2, 2: 3, 3: 4}
-        table = HashMap(dict)
-        self.assertEqual(table.to_dict(), dict)
-
     def test_from_list(self):
         test_data = [
             [],

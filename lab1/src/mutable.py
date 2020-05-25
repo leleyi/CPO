@@ -1,3 +1,7 @@
+from typing import TypeVar
+from typing import List
+
+
 class Node:
     def __init__(self, key, value):
         """
@@ -13,6 +17,9 @@ class Node:
 
     def __eq__(self, other):
         return self.key == other.key and self.value == other.value
+
+
+V = TypeVar(str, int, float)
 
 
 class HashMap(object):
@@ -44,7 +51,7 @@ class HashMap(object):
         if dict is not None:
             self.from_dict(dict)
 
-    def put(self, key, value):
+    def put(self, key: int, value: V):
         """
 
         :param key: map key_value
@@ -74,15 +81,16 @@ class HashMap(object):
             if initial_hash == hash_:
                 raise ValueError("Table is full")
 
-    def put_entry(self, entry):
+    def put_entry(self, entry: Node):
         """
         put a k_v entry
         :param entry: a k_v node
         """
         key = entry.key, value = entry.value
         self.put(key, value)
+        return self
 
-    def get(self, key):
+    def get(self, key: int) -> V:
         """
         get the storage value in map where key = key
         :param key: key
@@ -102,7 +110,7 @@ class HashMap(object):
                 # table is full and wrapped around
                 return None
 
-    def del_(self, key):
+    def del_(self, key: int) -> V:
         """
         delete the map node in map where the key = key
         :param key: map value
@@ -146,19 +154,19 @@ class HashMap(object):
             kvlist[item.key] = item.value
         return kvlist
 
-    def from_list(self, list):
+    def from_list(self, list: List):
+
         """
         add the map value from list make the i,v(enumerate) to the k and v
         :param list: list like [1,2,31,5]
         """
         if list:
-
             for i, v in enumerate(list):
                 self.put(i, v)
-        else:
-            return self
 
-    def to_list(self):
+        return self
+
+    def to_list(self) -> List:
         """
         make this map to a list. just use the values in the map
         :return: []
@@ -172,7 +180,7 @@ class HashMap(object):
         get the hash value
     """
 
-    def items(self):
+    def items(self) -> List:
         """
         get all the items in the map
         :return: items []
@@ -185,7 +193,7 @@ class HashMap(object):
                 items.append(entry)
         return items
 
-    def hash(self, key):
+    def hash(self, key: int) -> int:
         """
         get the hash value by the method
         :param key: key
@@ -193,12 +201,8 @@ class HashMap(object):
         """
         return key % self.size
 
-    def get_hash(self, key):
-        """
-        get the hash_value that had saved the map
-        :param key:
-        :return:
-        """
+    def get_hash(self, key: int) -> int:
+
         initial_hash = hash_ = self.hash(key)
         while True:
             if self.kvEntry[hash_] is self._empty or self.kvEntry[hash_] is self._deleted:
@@ -216,7 +220,7 @@ class HashMap(object):
         open address  (linear probing)
     """
 
-    def _rehash(self, old_hash):
+    def _rehash(self, old_hash: int) -> int:
         """
         if the hash collision happened should invoke this method
         :param old_hash: the hash_value collision
@@ -232,12 +236,14 @@ class HashMap(object):
         self.kvEntry.extend([self._empty] * self.size)
         self._keyset.extend([] * self.size)
         self.size = 2 * self.size
+        return self
 
     def mempty(self):
         """
         clear the map
         """
         self.kvEntry = [self._empty] * self.size
+        return self
 
     def mconcat(self, other):
         """
@@ -253,6 +259,8 @@ class HashMap(object):
                 value = other.get(key)
                 self.put(key, value)
 
+        return self
+
     def map(self, f):
         """
         map the map element to the f
@@ -262,6 +270,7 @@ class HashMap(object):
             value = self.get(key)
             value = f(value)
             self.put(key, value)
+        return self
 
     def reduce(self, f, initial_state):
         """
@@ -310,9 +319,4 @@ class HashMap(object):
         return "{" + res[0:-1] + "}"
 
     def __eq__(self, other):
-        # if other is None and self is None:
-        #     return True
-        # if other is not None or self is not None:
-        #     return False
-
         return self.__dict__ == other.__dict__ or self.to_dict() == other.to_dict()

@@ -23,15 +23,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(to_dict(put(HashMap(), 1, 2)), {1: 2})
         self.assertEqual(to_dict(del_(put(HashMap(), 1, 2), 1)), {})
 
-    def test_to_dict(self):
-        self.assertEqual(to_dict(None), {})
-        self.assertEqual(to_dict(put(HashMap(), 1, 2)), {1: 2})
-        self.assertEqual(to_dict(put(put(HashMap(), 1, 2), 2, 3)), {1: 2, 2: 3})
-
-    def test_from_dict(self):
-        test_data = {1: 2, 2: 3, 3: 4}
-        self.assertEqual(to_dict(HashMap(test_data)), test_data)
-
     def test_to_list(self):
         self.assertEqual(to_list(None), [])
         self.assertEqual(to_list(put(HashMap(), 1, 2)), [2])
@@ -147,10 +138,10 @@ class MyTestCase(unittest.TestCase):
         a_b__c = mconcat(dict_c, a_b)
         a__b_c = mconcat(dict_a, b_c)
         self.assertEqual(to_dict(a_b__c), to_dict(a__b_c))
-
         self.assertEqual(mconcat(None, None), None)
         self.assertEqual(mconcat(None, dict_a), dict_a)
         self.assertEqual(mconcat(dict_a, None), dict_a)
+        print(a_b__c,a__b_c)
 
 
 if __name__ == '__main__':

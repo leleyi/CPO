@@ -1,5 +1,6 @@
 from lab1.src.mutable import *
-
+from typing import TypeVar
+from typing import List
 
 def cons(map) -> HashMap:
     """
