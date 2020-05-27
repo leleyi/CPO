@@ -67,17 +67,35 @@ class MyTestCase(unittest.TestCase):
         table5 = map(table4, str)
         self.assertNotEqual(id(table4), id(table5))
 
+        table7 = HashMap()
+        table8 = HashMap()
+        table7 = put(put(table7, 1, 2), 12, 2)
+        table8 = put(put(table8, 12, 2), 1, 2)
+        self.assertEqual(to_dict(table7), to_dict(table8))
+        # The default size is 11, and the hash value is the key modulo 11. What get_hash gets is the final storage location
+        self.assertNotEqual(get_hash(table7, 1), get_hash(table8, 1))
+
     @given(a=st.lists(st.integers()), b=st.lists(st.integers()), key=st.integers(), value=st.integers())
     def test_immutable(self, a, b, key, value):
         table = from_list(a)
+        table_temp = table
         table1 = put(table, key, value)
         self.assertNotEqual(id(table), id(table1))
+        self.assertEqual(to_dict(table), to_dict(table_temp))
+
         table3 = del_(table, key)
+        table_temp = table1
         self.assertNotEqual(id(table1), id(table3))
+        self.assertEqual(to_dict(table_temp), to_dict(table1))
+
         table4 = from_list(b)
+        table3_temp = table3
+        table4_temp = table4
         table5 = mconcat(table3, table4)
         table6 = mconcat(table4, table3)
         self.assertNotEqual(id(table5), id(table6))
+        self.assertEqual(to_dict(table3_temp), to_dict(table3))
+        self.assertEqual(to_dict(table4_temp), to_dict(table4))
 
     def test_hash_collision(self):
         table1 = HashMap()
