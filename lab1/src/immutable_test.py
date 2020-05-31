@@ -77,17 +77,20 @@ class MyTestCase(unittest.TestCase):
 
     @given(a=st.lists(st.integers()), b=st.lists(st.integers()), key=st.integers(), value=st.integers())
     def test_immutable(self, a, b, key, value):
+        # After calling put(), the returned hashmap address is different, and the incoming hashmap has not changed.
         table = from_list(a)
         table_temp = table
         table1 = put(table, key, value)
         self.assertNotEqual(id(table), id(table1))
         self.assertEqual(to_dict(table), to_dict(table_temp))
 
+        # After calling del_(), the returned hashmap address is different, and the incoming hashmap has not changed.
         table3 = del_(table, key)
         table_temp = table1
         self.assertNotEqual(id(table1), id(table3))
         self.assertEqual(to_dict(table_temp), to_dict(table1))
 
+        # After calling mconcat(), the returned hashmap address is different, and the incoming hashmap has not changed.
         table4 = from_list(b)
         table3_temp = table3
         table4_temp = table4
