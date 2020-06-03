@@ -149,13 +149,13 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(a_b__c, a__b_c)
 
     @given(st.lists(st.integers()))
-    def test_from_list(self, a):
+    def test_from_list2(self, a):
         dict = HashMap()
         dict.from_list(a)
         self.assertEqual(dict.to_list(), a)
 
     @given(a=st.integers(), b=st.integers())
-    def test_put(self, a, b):
+    def test_put2(self, a, b):
         table = HashMap()
         table.put(a, b)
         self.assertEqual(table.get(a), b)

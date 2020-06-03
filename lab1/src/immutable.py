@@ -1,8 +1,11 @@
 from mutable import *
-from typing import TypeVar
-from typing import List
+from typing import TypeVar, Generator
+from typing import List, Dict
 
-def cons(map) -> HashMap:
+V = TypeVar('V', str, int, float, None)
+T2 = TypeVar('T2', str, int, float)
+
+def cons(map: HashMap) -> HashMap:
     """
     Copy a hash map
 
@@ -14,7 +17,7 @@ def cons(map) -> HashMap:
     return table
 
 
-def size(map) -> int:
+def size(map: HashMap) -> int:
     """
     Get the size of the hash map
 
@@ -27,7 +30,7 @@ def size(map) -> int:
         return len(map)
 
 
-def to_dict(map) -> {}:
+def to_dict(map: HashMap) -> Dict:
     """
     Convert hash map to dictionary
 
@@ -45,7 +48,7 @@ def to_dict(map) -> {}:
     return kvlist
 
 
-def to_list(map) -> list:
+def to_list(map: HashMap) -> List:
     """
     Convert hash map to list
 
@@ -66,7 +69,7 @@ def to_list(map) -> list:
 #         table.put(i, v)
 #     return table
 
-def from_list(list) -> HashMap:
+def from_list(list: List) -> HashMap:
     """
     Convert list to hash map
 
@@ -79,7 +82,7 @@ def from_list(list) -> HashMap:
     return table
 
 
-def put(map, key, value) -> HashMap:
+def put(map: HashMap, key: int, value: V) -> HashMap:
     """
     Insert key-value pairs into hash map
 
@@ -93,7 +96,7 @@ def put(map, key, value) -> HashMap:
     return table
 
 
-def get(map, key):
+def get(map: HashMap, key: int):
     """
     Get the corresponding content from the hash map according to the specified key value
 
@@ -104,20 +107,7 @@ def get(map, key):
     return map.get(key)
 
 
-def put_dic(map, **kwargs) ->HashMap:
-    """
-    Convert dict to hash map
-
-    :param map: HashMap
-    :param kwargs: A string of key-value pairs
-    :return: HashMap
-    """
-    table = cons(map)
-    table.put_dic(**kwargs)
-    return table
-
-
-def del_(map, key) -> HashMap:
+def del_(map: HashMap, key: int) -> HashMap:
     """
     Delete the value of the given key from the hash map
 
@@ -130,7 +120,7 @@ def del_(map, key) -> HashMap:
     return table
 
 
-def mconcat(map1, map2) -> HashMap:
+def mconcat(map1: HashMap, map2: HashMap) -> HashMap:
     """
     concat two maps to one
 
@@ -163,7 +153,7 @@ def mconcat(map1, map2) -> HashMap:
     return table1
 
 
-def map(map, f) -> HashMap:
+def map(map: HashMap, f: Generator[str, int, float]) -> HashMap:
     """
     map the map element to the f
 
@@ -179,7 +169,7 @@ def map(map, f) -> HashMap:
     return table
 
 
-def reduce(map, f, initial_state):
+def reduce(map: HashMap, f: Generator[str, int, float], initial_state: T2):
     """
     reduce the mapSet to one value
 
@@ -195,7 +185,7 @@ def reduce(map, f, initial_state):
     return state
 
 
-def get_hash(map, key) -> int:
+def get_hash(map: HashMap, key: int) -> int:
     """
     get the hash_value that had saved the map
 

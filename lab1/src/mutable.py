@@ -1,5 +1,6 @@
-from typing import TypeVar
+from typing import TypeVar, Generic
 from typing import List
+from typing import Type
 
 
 class Node:
@@ -18,11 +19,11 @@ class Node:
     def __eq__(self, other):
         return self.key == other.key and self.value == other.value
 
+T = TypeVar('T')
+V = TypeVar('V', str, int, float, None)
 
-V = TypeVar(str, int, float)
 
-
-class HashMap(object):
+class HashMap(Generic[T]):
     """
     HashMap Data Type
     HashMap() Create a new, empty map. It returns an empty map collection.
@@ -81,7 +82,7 @@ class HashMap(object):
             if initial_hash == hash_:
                 raise ValueError("Table is full")
 
-    def put_entry(self, entry: Node):
+    def put_entry(self, entry: Node) -> T:
         """
         put a k_v entry
         :param entry: a k_v node
@@ -124,9 +125,10 @@ class HashMap(object):
             elif self.kvEntry[hash_].key == key:
                 # key found, assign with deleted sentinel
                 self.kvEntry[hash_] = self._deleted
+                value = self.get(key)
                 self._keyset.remove(key)
                 self._len -= 1
-                return
+                return value
 
             hash_ = self._rehash(hash_)
             if initial_hash == hash_:
@@ -154,7 +156,7 @@ class HashMap(object):
             kvlist[item.key] = item.value
         return kvlist
 
-    def from_list(self, list: List):
+    def from_list(self, list: List) -> T:
 
         """
         add the map value from list make the i,v(enumerate) to the k and v
@@ -201,7 +203,7 @@ class HashMap(object):
         """
         return key % self.size
 
-    def get_hash(self, key: int) -> int:
+    def get_hash(self, key: int):
 
         initial_hash = hash_ = self.hash(key)
         while True:
@@ -228,7 +230,7 @@ class HashMap(object):
         """
         return (old_hash + 1) % self.size
 
-    def capacity_extension(self):
+    def capacity_extension(self) -> T:
         """
         if the capacity is not enough extension the capacity
         size = size * 2
@@ -238,14 +240,14 @@ class HashMap(object):
         self.size = 2 * self.size
         return self
 
-    def mempty(self):
+    def mempty(self) -> T:
         """
         clear the map
         """
         self.kvEntry = [self._empty] * self.size
         return self
 
-    def mconcat(self, other):
+    def mconcat(self, other) -> T:
         """
         concat two maps to one
         :param other:  map
@@ -261,7 +263,7 @@ class HashMap(object):
 
         return self
 
-    def map(self, f):
+    def map(self, f) -> T:
         """
         map the map element to the f
         :param f: the function to map

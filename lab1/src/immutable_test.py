@@ -131,17 +131,17 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(mconcat(a, None), a)
 
     @given(st.lists(st.integers()))
-    def test_from_list(self, lst):
+    def test_from_list2(self, lst):
         a = from_list(lst)
         self.assertEqual(to_list(a), lst)
 
     @given(st.lists(st.integers()))
-    def test_to_list(self, lst):
+    def test_to_list2(self, lst):
         a = from_list(lst)
         self.assertEqual(to_list(a), lst)
 
     @given(key=st.integers(), value=st.integers())
-    def test_put(self, key, value):
+    def test_put2(self, key, value):
         dict = put(HashMap(), key, value)
         self.assertEqual(get(dict, key), value)
 
